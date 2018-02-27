@@ -1,0 +1,32 @@
+body {
+	margin: 0px;
+	/*padding: 0px 40px;*/
+}
+
+.page {
+	padding: 15px;
+}
+
+.page .answer-wrapper {
+	margin: 5px;
+}
+
+.page .answer-wrapper .answer {
+  margin: 5px;
+  border-radius: 4px;
+  background-color: bisque;
+  padding: 4px;
+  transition: all 0.3s;
+}
+
+.page .answer-wrapper .answer:hover {
+	cursor: pointer;
+}
+
+.page .answer-wrapper .answer.selected {
+	background-color: lightskyblue;
+}
+
+.page .question-no {
+	display: inline-block;
+}
