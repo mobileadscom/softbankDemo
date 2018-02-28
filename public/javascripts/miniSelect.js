@@ -17,7 +17,7 @@ var miniSelect = {
 				wrapper[w].appendChild(head);
         itemWrapper = document.createElement('div');
         itemWrapper.setAttribute("class", classes[c] + '-items');
-        for (var i = 0; i < selEle.length; i++) {
+        for (var i = 1; i < selEle.length; i++) {
         	item = document.createElement('div');
         	item.innerHTML = selEle.options[i].innerHTML;
         	item.dataset.index = i;
