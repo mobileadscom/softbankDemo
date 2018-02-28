@@ -15,6 +15,8 @@ var survey = {
     var answers = document.getElementsByClassName('answer');
     var joinBtn = document.getElementById('toCampaign');
     var inputs = document.getElementsByClassName('input-answer');
+    var vidWidth = document.getElementById('vid').clientWidth;
+    var vidHeight = document.getElementById('vid').clientHeight;
 
     for (var a = 0; a < answers.length; a++) {
       answers[a].onclick = function() {
@@ -120,8 +122,8 @@ var survey = {
     
     window.onYouTubeIframeAPIReady = function() {
     	_this.player = new YT.Player('vid', {
-        height: '390',
-        width: '640',
+        height: vidHeight.toString(),
+        width: vidWidth.toString(),
         playerVars: {'rel': 0,'showinfo': 0, 'controls': 0},
         videoId: '6kpZW8oQ9tw',
         events: {

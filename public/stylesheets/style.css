@@ -4,27 +4,55 @@ body {
 }
 
 @media( min-width: 1px) {
+  .banner {
+  	height: 65px;
+  }
+
 	.terms {
-		max-height: 250px;
+		max-height: 200px;
 	}
 
 	.page {
 		font-size: 14px;
 	}
+
+	.vid-wrapper {
+    width: 300px;
+    height: 250px;
+	}
 }
 
 @media( min-width: 480px) {
-
+  .vid-wrapper {
+    width: 450px;
+    height: 300px;
+	}
 }
 
 @media( min-width: 768px) {
 	.terms {
-		max-height: 450px;
+		max-height: 400px;
 	}
 
 	.page {
 		font-size: 16px;
 	}
+}
+
+@media( min-width: 996px) {
+	.banner {
+  	height: 90px;
+  }
+}
+.banner {
+	width: 100%;
+	background-color: #EBEBEB;
+	text-align: left;
+}
+
+.banner img {
+	height: 100%;
+	display: block;
 }
 
 .terms {
@@ -83,6 +111,17 @@ body {
 
 .page .question-wrapper .no {
 	color: #FF4244;
+}
+
+.page .pic {
+	margin: auto;
+  width: 100%;
+  max-width: 450px;
+  margin-top: 15px;
+}
+
+.page .pic img {
+	width: 100%;
 }
 
 .page .answer-wrapper {
@@ -205,4 +244,32 @@ button:hover .left:after {
   border: 1px solid #aaa;
   padding: 8px 0px;
   padding-left: 8px;
+  box-sizing: border-box;
+}
+
+.page .vid-wrapper {
+  margin: 15px auto;
+}
+
+#toCampaign, #getCoupon {
+	margin: 20px auto;
+	margin-bottom: 40px;
+  border-radius: 5px;
+  background-color: #E54C3C;
+  border: none;
+  color: white;
+  width: 200px;
+  height: 50px;
+  font-weight: 600;
+}
+
+#toCampaign:hover, #getCoupon:hover {
+  background-color: #D34639;
+}
+
+.result-wrapper {
+	font-weight: 600;
+	color: #FF4244;
+	font-size: 28px;
+	margin-bottom: 20px;
 }
