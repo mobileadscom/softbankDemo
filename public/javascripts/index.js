@@ -1,3 +1,4 @@
+import axios from 'axios';
 import jammer from './jammer';
 import transitions from './transitions';
 import '../stylesheets/style.css';
@@ -6,6 +7,27 @@ var survey = {
 	answers: [],
 	currentQuestion: 1,
 	player: null,
+	params: {},
+	getParams: function() {
+		var query_string = {};
+    var query = window.location.search.substring(1);
+    var vars = query.split("&");
+    for (var i=0;i<vars.length;i++) {
+        var pair = vars[i].split("=");
+        // If first entry with this name
+        if (typeof query_string[pair[0]] === "undefined") {
+            query_string[pair[0]] = pair[1];
+        // If second entry with this name
+        } else if (typeof query_string[pair[0]] === "string") {
+            var arr = [ query_string[pair[0]], pair[1] ];
+            query_string[pair[0]] = arr;
+        // If third or later entry with this name
+        } else {
+            query_string[pair[0]].push(pair[1]);
+        }
+    } 
+    return query_string;
+	},
 	init: function() {
 		var _this = this;
 		var startBtn = document.getElementById('startSurvey');
@@ -17,6 +39,8 @@ var survey = {
     var inputs = document.getElementsByClassName('input-answer');
     var vidWidth = document.getElementById('vid').clientWidth;
     var vidHeight = document.getElementById('vid').clientHeight;
+    this.params = this.getParams();
+    console.log(this.params);
 
     for (var a = 0; a < answers.length; a++) {
       answers[a].onclick = function() {
@@ -129,7 +153,7 @@ var survey = {
         events: {
           'onStateChange': function(event){
             if (event.data == YT.PlayerState.ENDED) {
-            	_this.showResult(_this.answers);
+            	_this.showResult(_this.answers, _this.params);
             }
           }
         }
@@ -150,7 +174,7 @@ var survey = {
 			inEle: nPage
 		});
 	},
-	showResult: function(answers) {
+	showResult: function(answers, params) {
 		var win = false;
 		var no7_answers = ['伊右衛門', 'おーいお茶', '生茶'];
     if (answers[3] == '毎日' || no7_answers.indexOf(answers[6]) > -1) {
@@ -163,6 +187,24 @@ var survey = {
       document.getElementById('resultMsg').innerHTML = '綾鷹クーポンが当たりました！';
       document.getElementById('winnerPic').style.display = 'block';
       document.getElementById('getCoupon').style.display = 'block';
+      if (params.email) {
+      	var formData = new FormData();
+			  formData.append('sender', 'contact@o2otracking.com');
+			  formData.append('subject', 'SoftBank Survey Coupon Link');
+			  formData.append('recipient', params.email);
+			  formData.append('content','<head><meta charset="utf-8"></head><div style="text-align:center;font-weight:600;color:#FF4244;font-size:28px;">おめでとうございます</div><br><br><div style="text-align:center;font-weight:600;">綾鷹クーポンが当たりました！</div><a href="http://cpn.sbg.jp/coupon/display/951377211132/e14e253f527ccc44e402cd1eacbbb833" target="_blank" style="text-decoration:none;"><button style="display:block;margin:20px auto;margin-bottom:40px;border-radius:5px;background-color:#E54C3C;border:none;color:white;width:200px;height:50px;font-weight:600;">クーポンを受取る</button></a>');
+			  axios.post('https://www.mobileads.com/mail/send', formData, { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }).then(function(response) {
+			    console.log(response);
+			  }).catch(function(error) {
+			    console.log(error)
+			  });
+      }
+      else {
+      	console.log('email not found');
+      }
+    }
+    else {
+    	console.log('loser, no email sent');
     }
     transitions.switch({
 	  	outEle: document.getElementById('page10'),

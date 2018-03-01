@@ -105,7 +105,6 @@ body {
 }
 
 .page .question-wrapper {
-	
 	font-weight: 600;
 }
 
@@ -251,7 +250,7 @@ button:hover .left:after {
   margin: 15px auto;
 }
 
-#toCampaign, #getCoupon {
+#toCampaign, #getCoupon{
 	margin: 20px auto;
 	margin-bottom: 40px;
   border-radius: 5px;
