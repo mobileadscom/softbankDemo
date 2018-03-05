@@ -20,7 +20,7 @@
     </div>
     <button class="registerBtn" id="regEmail">Email</button>
     <div></div>
-    <a href="https://s3.amazonaws.com/rmarepo/3354/custom/softbankdemo/index.html" target="_blank" style="text-decoration: none;"><button class="registerBtn">Twitter</button></a>
+    <a href="https://s3.amazonaws.com/rmarepo/o2odemo/index.html" style="text-decoration: none;"><button class="registerBtn">Twitter</button></a>
   </div>
   <!-- The Modal -->
   <div id="myModal" class="modal">
@@ -121,7 +121,7 @@ form.onsubmit = function(event) {
   formData.append('sender', 'contact@o2otracking.com');
   formData.append('subject', 'SoftBank Survey Demo Link');
   formData.append('recipient', email);
-  formData.append('content', '<head><meta charset="utf-8"></head>ご登録ありがとうございました。下記にあるリンクをクリックしてください。その後キャンペーンへの参加をお願いします<br><br><a href="https://s3.amazonaws.com/rmarepo/3354/custom/softbankdemo/index.html?email=' + email + '" target="_blank">https://s3.amazonaws.com/rmarepo/3354/custom/softbankdemo/index.html</a>');
+  formData.append('content', '<head><meta charset="utf-8"></head>ご登録ありがとうございました。下記にあるリンクをクリックしてください。その後キャンペーンへの参加をお願いします<br><br><a href="https://s3.amazonaws.com/rmarepo/o2odemo/index.html?email=' + email + '" target="_blank">https://s3.amazonaws.com/rmarepo/o2odemo/index.html</a>');
   axios.post('https://www.mobileads.com/mail/send', formData, { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }).then(function(response) {
     console.log(response);
   }).catch(function(error) {
@@ -187,6 +187,7 @@ window.onclick = function(event) {
 .banner img {
   height: 100%;
   display: block;
+  margin: auto;
 }
 
 .page {

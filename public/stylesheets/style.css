@@ -53,6 +53,17 @@ body {
 .banner img {
 	height: 100%;
 	display: block;
+  margin: auto;
+}
+
+.loading-block {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 28px;
+  color: #E54C3C;
+  font-weight: 600;
 }
 
 .terms {

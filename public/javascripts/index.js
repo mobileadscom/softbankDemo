@@ -8,6 +8,7 @@ var survey = {
 	currentQuestion: 1,
 	player: null,
 	params: {},
+  userInfo: {},
 	getParams: function() {
 		var query_string = {};
     var query = window.location.search.substring(1);
@@ -133,7 +134,7 @@ var survey = {
     };
 
 		for (var p = 0; p < pages.length; p++) {
-			if (pages[p].id != 'page1') {
+			if (pages[p].id != 'loadingPage') {
 				pages[p].style.display = 'none';
 			}
 		}
@@ -159,7 +160,77 @@ var survey = {
         }
       });
     }
+    
+    if (this.params.email || this.params.id) {
+      this.getUserInfo();
+      var qNO = _this.userInfo.answered + 1;
+      this.currentQuestion = _this.userInfo.answered;
+      this.answers = this.userInfo.answers;
+      setTimeout(function() {
+        transitions.switch({
+          outEle: document.getElementById('loadingPage'),
+          inEle: document.getElementById('page' + qNO.toString()),
+          inCallback: _this.applyAnwers(_this.answers)
+        });
+
+      }, 2000);
+    }
+    else {
+      if (this.params.q) {
+        var qNO = parseInt(_this.params.q) + 1;
+        setTimeout(function() {
+          transitions.switch({
+            outEle: document.getElementById('loadingPage'),
+            inEle: document.getElementById('page' + qNO.toString())
+          });
+        }, 2000);
+      }
+      else {
+        setTimeout(function() {
+          transitions.switch({
+            outEle: document.getElementById('loadingPage'),
+            inEle: document.getElementById('page1')
+          });
+        }, 2000);
+      }
+    }
 	},
+  getUserInfo: function() {
+    this.userInfo = {
+      email: this.params.email,
+      answered: 5,
+      answers: ['男性', '25歳〜29歳', '青森県', '週に4〜5回', 'コンビニエンスストア'],
+      // status: 'win',
+      // coupon: 'http://cpn.sbg.jp/coupon/display/951377211132/e14e253f527ccc44e402cd1eacbbb833'
+
+    }
+  },
+  applyAnwers: function(ans) {
+    console.log(ans);
+    for (var a = 0; a < ans.length; a++) {
+      var q = a + 1;
+      var ansWrapper = document.getElementById('answer' + q.toString());
+      var ansText = ans[a].indexOf('その他') > -1 ? 'その他' : ans[a];
+      console.log(ansText);
+      if (q != 3) {
+        var ansBlock = ansWrapper.childNodes
+        for (var b = 0; b < ansBlock.length; b++) {
+          if (ansBlock[b].innerHTML == ansText) {
+            ansBlock[b].classList.add('selected');
+          }
+          if (ansText == 'その他') {
+            document.getElementById('q' + q.toString() + 'a').value = ans[a].split(': ')[1];
+          }
+        }
+      }
+      else if (q == 3) {
+        var selectEl = document.getElementById('prefectures');
+        var ansDis = ansWrapper.getElementsByClassName('miniSelect-selected')[0];
+        selectEl.value = ans[a];
+        ansDis.innerHTML = ans[a];
+      }
+    }
+  },
 	changeQuestion: function(i) {
 		var cPage = document.getElementById('page' + (this.currentQuestion + 1).toString());
     if (i > 0) {
