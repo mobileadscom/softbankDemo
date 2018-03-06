@@ -9,6 +9,10 @@ var survey = {
 	player: null,
 	params: {},
   userInfo: {},
+  couponsLeft: {
+    A: 0,
+    B: 0
+  },
 	getParams: function() {
 		var query_string = {};
     var query = window.location.search.substring(1);
@@ -91,6 +95,8 @@ var survey = {
 				if (_this.answers[_this.currentQuestion - 1]) {
 					if (!jammer.isJammed(this)) {
 	          jammer.jam(this);
+            /* req */
+            // save answer
 	          _this.changeQuestion(1);
 					}
 				}
@@ -154,13 +160,18 @@ var survey = {
         events: {
           'onStateChange': function(event){
             if (event.data == YT.PlayerState.ENDED) {
-            	_this.showResult(_this.answers, _this.params);
+            	_this.showResult(_this.answers, _this.params, _this.couponsLeft);
             }
           }
         }
       });
     }
     
+    //Retrieve Coupons Count
+    /*req*/
+    this.couponsLeft.A = 10;
+    this.couponsLeft.B = 10;
+
     if (this.params.email || this.params.id) {
       this.getUserInfo();
       var qNO = _this.userInfo.answered + 1;
@@ -196,6 +207,7 @@ var survey = {
     }
 	},
   getUserInfo: function() {
+    /*req*/
     this.userInfo = {
       email: this.params.email,
       answered: 5,
@@ -245,25 +257,68 @@ var survey = {
 			inEle: nPage
 		});
 	},
-	showResult: function(answers, params) {
+	showResult: function(answers, params, couponsLeft) {
 		var win = false;
+    var group = 'A';
 		var no7_answers = ['伊右衛門', 'おーいお茶', '生茶'];
-    if (answers[3] == '毎日' || no7_answers.indexOf(answers[6]) > -1) {
-      win = true;
+
+    /* Winning Logic */
+    if (answers[3] == '毎日' && no7_answers.indexOf(answers[6]) > -1) {
+      if (couponsLeft.A > 0) {
+        group = 'A';
+        win = true;
+      }
+      else if (couponsLeft.B > 0) {
+        group = 'B';
+        win = true;
+      }
+      else {
+        win = false;
+      }
     }
+    else if (answers[3] == '毎日') {
+      if (couponsLeft.A > 0) {
+        win = true;
+        group = 'A';
+      }
+      else {
+        win = false;
+      }
+    }
+    else if (no7_answers.indexOf(answers[6]) > -1) {
+      if (couponsLeft.B > 0) {
+        win = true;
+        group = 'B';
+      }
+      else {
+        win = false;
+      }
+    }
+    else {
+      win = false;
+    }
+    console.log(couponsLeft);
+    console.log(win, group);
+
     var result = document.getElementById('result');
     var resultMsg = document.getElementById('resultMsg');
     if (win) {
+      var couponLink = '';
+      // Mark User as winner and Get Coupon Link from BE
+      /* req */
+      couponLink = 'http://cpn.sbg.jp/coupon/display/951377211132/e14e253f527ccc44e402cd1eacbbb833';
+
       document.getElementById('result').innerHTML = 'おめでとうございます';
       document.getElementById('resultMsg').innerHTML = '綾鷹クーポンが当たりました！';
       document.getElementById('winnerPic').style.display = 'block';
       document.getElementById('getCoupon').style.display = 'block';
+      document.getElementById('couponLink').setAttribute('href', couponLink);
       if (params.email) {
       	var formData = new FormData();
 			  formData.append('sender', 'contact@o2otracking.com');
 			  formData.append('subject', 'SoftBank Survey Coupon Link');
 			  formData.append('recipient', params.email);
-			  formData.append('content','<head><meta charset="utf-8"></head><div style="text-align:center;font-weight:600;color:#FF4244;font-size:28px;">おめでとうございます</div><br><br><div style="text-align:center;font-weight:600;">綾鷹クーポンが当たりました！</div><a href="http://cpn.sbg.jp/coupon/display/951377211132/e14e253f527ccc44e402cd1eacbbb833" target="_blank" style="text-decoration:none;"><button style="display:block;margin:20px auto;margin-bottom:40px;border-radius:5px;background-color:#E54C3C;border:none;color:white;width:200px;height:50px;font-weight:600;">クーポンを受取る</button></a>');
+			  formData.append('content','<head><meta charset="utf-8"></head><div style="text-align:center;font-weight:600;color:#FF4244;font-size:28px;">おめでとうございます</div><br><br><div style="text-align:center;font-weight:600;">綾鷹クーポンが当たりました！</div><a href="' + couponLink + '" target="_blank" style="text-decoration:none;"><button style="display:block;margin:20px auto;margin-bottom:40px;border-radius:5px;background-color:#E54C3C;border:none;color:white;width:200px;height:50px;font-weight:600;">クーポンを受取る</button></a>');
 			  axios.post('https://www.mobileads.com/mail/send', formData, { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }).then(function(response) {
 			    console.log(response);
 			  }).catch(function(error) {
@@ -275,6 +330,8 @@ var survey = {
       }
     }
     else {
+      // Mark user as loser
+      /* req */
     	console.log('loser, no email sent');
     }
     transitions.switch({
