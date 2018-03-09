@@ -13,10 +13,16 @@
 <body>
 
   <header>
-  	<div class="banner">
+    <div class="banner">
       <img src="images/header.jpg" />
-  	</div>
+    </div>
   </header>
+  <div id="loadingPage" class="page">
+    <div class="loading-block">
+      O2O DEMO
+      <br>LOADING
+    </div>
+  </div>
   <div id="page1" class="page">
     <div class="msg-wrapper">
       利用規約に同意ください。
@@ -115,165 +121,165 @@
       <br>あなたの性別は？
     </div>
     <div class="answer-wrapper">
-    	<div id="answer1">
-        <div class="answer">男性</div>
-        <div class="answer">女性</div>
-    	</div>
+      <div id="answer1">
+        <div class="answer" value="男性">男性</div>
+        <div class="answer" value="女性">女性</div>
+      </div>
     </div>
     <div class="pagination-wrapper">
-    	<div class="question-no">
+      <div class="question-no">
         1/7
-    	</div>
+      </div>
       <button class="next-btn">NEXT <span class="right"></button>
-  	</div>
+    </div>
   </div>
   <div id="page3" class="page">
-  	<div class="question-wrapper">
+    <div class="question-wrapper">
       <span class="no">QUESTION 2</span>
       <br>あなたの年代は？
     </div>
     <div class="answer-wrapper">
-    	<div id="answer2">
-        <div class="answer">19歳未満</div>
-        <div class="answer">20歳〜24歳</div>
-        <div class="answer">25歳〜29歳</div>
-				<div class="answer">30歳〜34歳</div>
-				<div class="answer">35歳〜39歳</div>
-				<div class="answer">40歳〜44歳</div>
-				<div class="answer">45歳〜49歳</div>
-				<div class="answer">50歳〜54歳</div>
-				<div class="answer">55歳〜59歳</div>
-				<div class="answer">60歳以上</div>
-    	</div>
+      <div id="answer2">
+        <div class="answer" value="19歳未満">19歳未満</div>
+        <div class="answer" value="20歳〜24歳">20歳〜24歳</div>
+        <div class="answer" value="25歳〜29歳">25歳〜29歳</div>
+        <div class="answer" value="30歳〜34歳">30歳〜34歳</div>
+        <div class="answer" value="35歳〜39歳">35歳〜39歳</div>
+        <div class="answer" value="40歳〜44歳">40歳〜44歳</div>
+        <div class="answer" value="45歳〜49歳">45歳〜49歳</div>
+        <div class="answer" value="50歳〜54歳">50歳〜54歳</div>
+        <div class="answer" value="55歳〜59歳">55歳〜59歳</div>
+        <div class="answer" value="60歳以上">60歳以上</div>
+      </div>
     </div>
     <div class="pagination-wrapper">
       <button class="back-btn">BACK <span class="left"></button>
       <div class="question-no">
         2/7
-    	</div>
+      </div>
       <button class="next-btn">NEXT <span class="right"></button>
-  	</div>
+    </div>
   </div>
   <div id="page4" class="page">
-  	<div class="question-wrapper">
+    <div class="question-wrapper">
       <span class="no">QUESTION 3</span>
       <br>あなたはどこに住んでいますか？
     </div>
     <div class="answer-wrapper">
-    	<div id="answer3">
-    		<div class="miniSelect">
+      <div id="answer3">
+        <div class="miniSelect">
           <select id="prefectures">
             <option value="0" selected>選択してください</option>
             <option value="北海道">北海道</option>
-						<option value="青森県">青森県</option>
-						<option value="岩手県">岩手県</option>
-						<option value="宮城県">宮城県</option>
-						<option value="秋田県">秋田県</option>
-						<option value="山形県">山形県</option>
-						<option value="福島県">福島県</option>
-						<option value="茨城県">茨城県</option>
-						<option value="栃木県">栃木県</option>
-						<option value="群馬県">群馬県</option>
-						<option value="埼玉県">埼玉県</option>
-						<option value="千葉県">千葉県</option>
-						<option value="東京都">東京都</option>
-						<option value="神奈川県">神奈川県</option>
-						<option value="新潟県">新潟県</option>
-						<option value="富山県">富山県</option>
-						<option value="石川県">石川県</option>
-						<option value="福井県">福井県</option>
-						<option value="山梨県">山梨県</option>
-						<option value="長野県">長野県</option>
-						<option value="岐阜県">岐阜県</option>
-						<option value="静岡県">静岡県</option>
-						<option value="愛知県">愛知県</option>
-						<option value="三重県">三重県</option>
-						<option value="滋賀県">滋賀県</option>
-						<option value="京都府">京都府</option>
-						<option value="大阪府">大阪府</option>
-						<option value="兵庫県">兵庫県</option>
-						<option value="奈良県">奈良県</option>
-						<option value="和歌山県">和歌山県</option>
-						<option value="鳥取県">鳥取県</option>
-						<option value="島根県">島根県</option>
-						<option value="岡山県">岡山県</option>
-						<option value="広島県">広島県</option>
-						<option value="山口県">山口県</option>
-						<option value="徳島県">徳島県</option>
-						<option value="香川県">香川県</option>
-						<option value="愛媛県">愛媛県</option>
-						<option value="高知県">高知県</option>
-						<option value="福岡県">福岡県</option>
-						<option value="佐賀県">佐賀県</option>
-						<option value="長崎県">長崎県</option>
-						<option value="熊本県">熊本県</option>
-						<option value="大分県">大分県</option>
-						<option value="宮崎県">宮崎県</option>
-						<option value="鹿児島県">鹿児島県</option>
-						<option value="沖縄県">沖縄県</option>
+            <option value="青森県">青森県</option>
+            <option value="岩手県">岩手県</option>
+            <option value="宮城県">宮城県</option>
+            <option value="秋田県">秋田県</option>
+            <option value="山形県">山形県</option>
+            <option value="福島県">福島県</option>
+            <option value="茨城県">茨城県</option>
+            <option value="栃木県">栃木県</option>
+            <option value="群馬県">群馬県</option>
+            <option value="埼玉県">埼玉県</option>
+            <option value="千葉県">千葉県</option>
+            <option value="東京都">東京都</option>
+            <option value="神奈川県">神奈川県</option>
+            <option value="新潟県">新潟県</option>
+            <option value="富山県">富山県</option>
+            <option value="石川県">石川県</option>
+            <option value="福井県">福井県</option>
+            <option value="山梨県">山梨県</option>
+            <option value="長野県">長野県</option>
+            <option value="岐阜県">岐阜県</option>
+            <option value="静岡県">静岡県</option>
+            <option value="愛知県">愛知県</option>
+            <option value="三重県">三重県</option>
+            <option value="滋賀県">滋賀県</option>
+            <option value="京都府">京都府</option>
+            <option value="大阪府">大阪府</option>
+            <option value="兵庫県">兵庫県</option>
+            <option value="奈良県">奈良県</option>
+            <option value="和歌山県">和歌山県</option>
+            <option value="鳥取県">鳥取県</option>
+            <option value="島根県">島根県</option>
+            <option value="岡山県">岡山県</option>
+            <option value="広島県">広島県</option>
+            <option value="山口県">山口県</option>
+            <option value="徳島県">徳島県</option>
+            <option value="香川県">香川県</option>
+            <option value="愛媛県">愛媛県</option>
+            <option value="高知県">高知県</option>
+            <option value="福岡県">福岡県</option>
+            <option value="佐賀県">佐賀県</option>
+            <option value="長崎県">長崎県</option>
+            <option value="熊本県">熊本県</option>
+            <option value="大分県">大分県</option>
+            <option value="宮崎県">宮崎県</option>
+            <option value="鹿児島県">鹿児島県</option>
+            <option value="沖縄県">沖縄県</option>
           </select>
-    		</div>
-    	</div>
+        </div>
+      </div>
     </div>
     <div class="pagination-wrapper">
       <button class="back-btn">BACK <span class="left"></button>
       <div class="question-no">
         3/7
-    	</div>
+      </div>
       <button class="next-btn">NEXT <span class="right"></button>
-  	</div>
+    </div>
   </div>
   <div id="page5" class="page">
-  	<div class="question-wrapper">
+    <div class="question-wrapper">
       <span class="no">QUESTION 4</span>
       <br>ペットボトルで緑茶を飲む頻度を教えてください。
     </div>
     <div class="answer-wrapper">
-    	<div id="answer4">
-        <div class="answer">毎日</div>
-        <div class="answer">週に4〜5回</div>
-        <div class="answer">週に2〜3回</div>
-				<div class="answer">週に1回</div>
-				<div class="answer">月に1回</div>
-				<div class="answer">数ヶ月に1回</div>
-				<div class="answer">ほとんど飲まない</div>
-    	</div>
+      <div id="answer4">
+        <div class="answer" value="毎日">毎日</div>
+        <div class="answer" value="週に4〜5回">週に4〜5回</div>
+        <div class="answer" value="週に2〜3回">週に2〜3回</div>
+        <div class="answer" value="週に1回">週に1回</div>
+        <div class="answer" value="月に1回">月に1回</div>
+        <div class="answer" value="数ヶ月に1回">数ヶ月に1回</div>
+        <div class="answer" value="ほとんど飲まない">ほとんど飲まない</div>
+      </div>
     </div>
     <div class="pagination-wrapper">
       <button class="back-btn">BACK <span class="left"></button>
       <div class="question-no">
         4/7
-    	</div>
+      </div>
       <button class="next-btn">NEXT <span class="right"></button>
-  	</div>
+    </div>
   </div>
   <div id="page6" class="page">
-  	<div class="question-wrapper">
+    <div class="question-wrapper">
       <span class="no">QUESTION 5</span>
       <br>ペットボトルで緑茶を購入する場所を教えてください。
     </div>
     <div class="answer-wrapper">
-    	<div id="answer5">
-        <div class="answer">コンビニエンスストア</div>
-        <div class="answer">スーパー</div>
-        <div class="answer">ドラックストア</div>
-				<div class="answer">ディスカウントスーパー</div>
-				<div class="answer">自動販売機</div>
-				<div class="answer">インターネット(EC)</div>
-				<div class="answer" id="q5c" data-target="q5a">その他</div>
-				<input type="text" class="input-answer" id="q5a" data-target="q5c"/>
-    	</div>
+      <div id="answer5">
+        <div class="answer" value="コンビニエンスストア">コンビニエンスストア</div>
+        <div class="answer" value="スーパー">スーパー</div>
+        <div class="answer" value="ドラックストア">ドラックストア</div>
+        <div class="answer" value="ディスカウントスーパー">ディスカウントスーパー</div>
+        <div class="answer" value="自動販売機">自動販売機</div>
+        <div class="answer" value="インターネット(EC)">インターネット(EC)</div>
+        <div class="answer" id="q5c" data-target="q5a" value="その他">その他</div>
+        <input type="text" class="input-answer" id="q5a" data-target="q5c"/>
+      </div>
     </div>
     <div class="pagination-wrapper">
       <button class="back-btn">BACK <span class="left"></button>
       <div class="question-no">
         5/7
-    	</div>
+      </div>
       <button class="next-btn">NEXT <span class="right"></button>
-  	</div>
+    </div>
   </div>
   <div id="page7" class="page">
-  	<div class="question-wrapper">
+    <div class="question-wrapper">
       <span class="no">QUESTION 6</span>
       <br>下記商品「綾鷹」を購入したことはありますか？
     </div>
@@ -281,72 +287,92 @@
       <img src="images/cup01.jpg" />
     </div>
     <div class="answer-wrapper">
-    	<div id="answer6">
-        <div class="answer">よく購入する</div>
-        <div class="answer">購入したことがある</div>
-        <div class="answer">知っているが購入したことはない</div>
-				<div class="answer">知らなかった</div>
-    	</div>
+      <div id="answer6">
+        <div class="answer" value="よく購入する">よく購入する</div>
+        <div class="answer" value="購入したことがある">購入したことがある</div>
+        <div class="answer" value="知っているが購入したことはない">知っているが購入したことはない</div>
+        <div class="answer" value="知らなかった">知らなかった</div>
+      </div>
     </div>
     <div class="pagination-wrapper">
       <button class="back-btn">BACK <span class="left"></button>
       <div class="question-no">
         6/7
-    	</div>
+      </div>
       <button class="next-btn">NEXT <span class="right"></button>
-  	</div>
+    </div>
   </div>
   <div id="page8" class="page">
-  	<div class="question-wrapper">
+    <div class="question-wrapper">
       <span class="no">QUESTION 7</span>
       <br>あなたがよく購入するペットボトル緑茶の名前を教えてください
     </div>
     <div class="answer-wrapper">
-    	<div id="answer7">
-        <div class="answer">綾鷹</div>
-        <div class="answer">伊右衛門</div>
-        <div class="answer">おーいお茶</div>
-				<div class="answer">生茶</div>
-				<div class="answer">ヘルシア緑茶</div>
-				<div class="answer" id="q7c" data-target="q7a">その他</div>
-				<input type="text" class="input-answer" id="q7a" data-target="q7c"/>
-				<div class="answer">ペットボトルのお茶は飲まない</div>
-    	</div>
+      <div id="answer7">
+        <div class="answer" value="綾鷹">綾鷹</div>
+        <div class="answer" value="伊右衛門">伊右衛門</div>
+        <div class="answer" value="おーいお茶">おーいお茶</div>
+        <div class="answer" value="生茶">生茶</div>
+        <div class="answer" value="ヘルシア緑茶">ヘルシア緑茶</div>
+        <div class="answer" id="q7c" data-target="q7a" value="その他">その他</div>
+        <input type="text" class="input-answer" id="q7a" data-target="q7c"/>
+        <div class="answer" value="ペットボトルのお茶は飲まない">ペットボトルのお茶は飲まない</div>
+      </div>
     </div>
     <div class="pagination-wrapper">
       <button class="back-btn">BACK <span class="left"></button>
       <div class="question-no">
         7/7
-    	</div>
+      </div>
       <button class="next-btn">NEXT <span class="right"></button>
-  	</div>
+    </div>
   </div>
+<!--   <div id="page8" class="page">
+    <div class="question-wrapper">
+      Q8. 以下のサイトを見て感想をおしえてください。
+    </div>
+    <button class="link">サイトを見る</button>
+    <div class="answer-wrapper">
+      <div id="answer8">
+        <div class="answer">好ましい</div>
+        <div class="answer">普通</div>
+        <div class="answer">好ましくない</div>
+      </div>
+    </div>
+    <div class="pagination-wrapper">
+      <button class="back-btn">Back</button>
+      <div class="question-no">
+        8/8
+      </div>
+      <button class="next-btn">Next</button>
+    </div>
+  </div> -->
   <div id="page9" class="page">
-  	<div class="msg-wrapper">
+    <div class="msg-wrapper">
       アンケートにご協力頂きありがとうございました。
     </div>
     <button id="toCampaign">キャンペーンに応募</button>
     <div class="pagination-wrapper">
       <button class="back-btn">BACK <span class="left"></button>
-  	</div>
+    </div>
   </div>
   <div id="page10" class="page">
-  	<div class="msg-wrapper">
+    <div class="msg-wrapper">
       動画視聴後に結果が表示されます。
     </div>
     <div class="vid-wrapper" id="vid">
     </div>
   </div>
   <div id="page11" class="page">
-  	<div class="result-wrapper" id="result">
-  		残念でした
+    <div class="result-wrapper" id="result">
+      残念でした
     </div>
     <div class="pic" id="winnerPic" style="display: none;">
     </div>
     <div class="msg-wrapper" id="resultMsg">
-	    次回のキャンペーンをお楽しみに
+      次回のキャンペーンをお楽しみに
     </div>
-    <a href="http://cpn.sbg.jp/coupon/display/951377211132/e14e253f527ccc44e402cd1eacbbb833" target="_blank" style="text-decoration: none;"><button style="display: none;" id="getCoupon">クーポンを受取る</button></a>
+    <a id="couponLink" href="" target="_blank" style="text-decoration: none;"><button style="display: none;" id="getCoupon">クーポンを受取る</button></a>
   </div>
 
 </body>
@@ -354,7 +380,7 @@
 
 <script type="text/javascript">
 document.addEventListener('DOMContentLoaded', function() {
-	miniSelect.init("miniSelect");
+  miniSelect.init("miniSelect");
   survey.init();
 });
 </script>

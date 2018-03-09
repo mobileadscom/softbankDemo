@@ -18,15 +18,15 @@ var miniSelect = {
         itemWrapper = document.createElement('div');
         itemWrapper.setAttribute("class", classes[c] + '-items');
         for (var i = 1; i < selEle.length; i++) {
-        	item = document.createElement('div');
-        	item.innerHTML = selEle.options[i].innerHTML;
-        	item.dataset.index = i;
-        	item.addEventListener('click', function(e) {
-            var s = this.parentNode.parentNode.getElementsByTagName("select")[0]; 
-            var h = this.parentNode.previousSibling;
-            s.selectedIndex = this.dataset.index;
-            h.innerHTML = this.innerHTML;
-            h.click();
+	        	item = document.createElement('div');
+	        	item.innerHTML = selEle.options[i].innerHTML;
+	        	item.dataset.index = i;
+	        	item.addEventListener('click', function(e) {
+	            var s = this.parentNode.parentNode.getElementsByTagName("select")[0]; 
+	            var h = this.parentNode.previousSibling;
+	            s.selectedIndex = this.dataset.index;
+	            h.innerHTML = this.innerHTML;
+	            h.click();
         	});
         	itemWrapper.appendChild(item);
         }
