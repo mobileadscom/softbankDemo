@@ -169,7 +169,7 @@ var survey = {
     	_this.player = new YT.Player('vid', {
         height: vidHeight.toString(),
         width: vidWidth.toString(),
-        playerVars: {'rel': 0,'showinfo': 0, 'controls': 0},
+        playerVars: {'rel': 0,'showinfo': 0, 'controls': 0, 'playsinline': 1},
         videoId: '6kpZW8oQ9tw',
         events: {
           'onStateChange': function(event){
@@ -377,7 +377,7 @@ var survey = {
         axios.post('https://www.mobileads.com/api/coupon/softbank/mark_user', markForm, { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }).then(function(response) {
           console.log(response);
           _this.showWin(response.data.couponLink);
-          /*var formData = new FormData();
+          var formData = new FormData();
           formData.append('sender', 'contact@o2otracking.com');
           formData.append('subject', 'SoftBank Survey Coupon Link');
           formData.append('recipient', params.id);
@@ -386,7 +386,7 @@ var survey = {
             console.log(response);
           }).catch(function(error) {
             console.log(error)
-          });*/
+          });
         }).catch(function(error) {
           console.log(error);
         });
