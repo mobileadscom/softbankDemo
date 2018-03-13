@@ -283,3 +283,83 @@ button:hover .left:after {
 	font-size: 28px;
 	margin-bottom: 20px;
 }
+
+.registerBtn {
+  margin: 5px auto;
+  border-radius: 5px;
+  background-color: #E54C3C;
+  border: none;
+  color: white;
+  width: 200px;
+  height: 40px;
+  font-weight: 600;
+}
+.registerBtn:hover {
+  cursor: pointer;
+  background-color: #D34639;
+}
+
+#emailInput {
+  width: 100%;
+  display: block;
+  margin: 5px auto;
+  max-width: 250px;
+  border-radius: 4px;
+  border: 1px solid #aaa;
+  padding: 8px 0px;
+  padding-left: 8px;
+  box-sizing: border-box;
+}
+
+#submitBtn {
+  background-color: #FF4342;
+  color: white;
+  border-radius: 4px;
+  border: none;
+  width: 120px;
+  height: 35px;
+  font-weight: 600;
+  margin: 20px auto;
+  display: block;
+}
+
+#submitBtn:hover {
+  cursor: pointer;
+  background-color: #D34639;
+}
+
+.modal-content #doneSec, .modal-content #regSec {
+  padding: 15px;
+  height: 210px;
+}
+
+.modal-content #doneSec {
+  display: none;
+}
+
+.loader {
+  border: 5px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 5px solid #555555;
+  margin: auto;
+  -webkit-animation: spin 1s linear infinite;
+  animation: spin 1s linear infinite;
+  width: 50px;
+  height: 50px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  box-sizing: border-box;
+  display: none;
+}
+
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

@@ -5,6 +5,7 @@
   <meta charset="utf-8">
   <title>Softbank Survey Registration</title>
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script src="javascripts/oauth-signature.min.js"></script>
 </head>
 <body>
   <header>
@@ -186,24 +187,27 @@ regT.onclick = function() {
   // The signed-in user info.
   var user = result.user;
   console.log(result);
-  axios.post('https://api.twitter.com/direct_messages/events/new', {
-    "event": {
-      "type": "message_create",
-      "message_create": {
-        "target": {
-          "recipient_id": "892241160915238912"
-        },
-        "message_data": {
-          "text": "Hello World!",
-        }
-      }
-    }
-  }, { headers: { 'Authorization': 'Bearer ${token}' } }).then(function(response) {
+  var twitterId = result.additionalUserInfo.profile.id_str;
+  console.log(twitterId);
+
+  /*axios.post('/sendMessage', {
+    token: token,
+    tokenSecret: secret,
+    recipientId: twitterId
+  }).then(function(response) {
+    console.log(response);
+  }).catch(function(error) {
+    console.log(error);
+  });*/
+  axios.post('/getUser', {
+    token: token,
+    tokenSecret: secret,
+    id: twitterId
+  }).then(function(response) {
     console.log(response);
   }).catch(function(error) {
     console.log(error);
   });
-  // ...
 }).catch(function(error) {
   // Handle Errors here.
   var errorCode = error.code;
@@ -215,7 +219,6 @@ regT.onclick = function() {
   // ...
 });
 }
-
 </script>
 
 <style type="text/css">
@@ -422,7 +425,7 @@ regT.onclick = function() {
 }
 </style>
 
-<script src="https://www.gstatic.com/firebasejs/4.10.1/firebase-app.js"></script>
+<!-- <script src="https://www.gstatic.com/firebasejs/4.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/4.10.1/firebase-auth.js"></script>
 <script>
   // Initialize Firebase
@@ -435,4 +438,32 @@ regT.onclick = function() {
     messagingSenderId: "181010939170"
   };
   firebase.initializeApp(config);
+</script> -->
+
+<script src="https://www.gstatic.com/firebasejs/4.11.0/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyBv5E_2QGQazK5dc5JL3YMg4u0NHAt4cLw",
+    authDomain: "softbankdemo-4a194.firebaseapp.com",
+    databaseURL: "https://softbankdemo-4a194.firebaseio.com",
+    projectId: "softbankdemo-4a194",
+    storageBucket: "softbankdemo-4a194.appspot.com",
+    messagingSenderId: "890724005878"
+  };
+  firebase.initializeApp(config);
 </script>
+
+<!-- <script src="https://www.gstatic.com/firebasejs/4.11.0/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyA2W7jsBKb73VmC9lK3oeepIOg-jftvBJg",
+    authDomain: "softbankdemo-b237d.firebaseapp.com",
+    databaseURL: "https://softbankdemo-b237d.firebaseio.com",
+    projectId: "softbankdemo-b237d",
+    storageBucket: "softbankdemo-b237d.appspot.com",
+    messagingSenderId: "697899371706"
+  };
+  firebase.initializeApp(config);
+</script> -->
