@@ -29,10 +29,10 @@ router.post('/sendMessage', function(req, res) {
       "type": "message_create",
       "message_create": {
         "target": {
-          "recipient_id": "193317935"
+          "recipient_id": req.body.recipientId
         },
         "message_data": {
-          "text": "Testing direct message",
+          "text": req.body.text
         }
       }
     }
@@ -83,9 +83,27 @@ router.post('/getUser', function(req, res) {
   		}
   		else {
   			console.log('not following');
-  			res.send('not following');
+        res.send('not following');
   		}
   	}
+  });
+});
+
+router.post('/listenFollow', function(req, res) {
+  var S = new Twit({
+    consumer_key: 'YFJ3RWmtqhxP8Qxyxf1LJ5pRv',
+    consumer_secret: 'UfxhG4bZ4UrbFpTn60jOFnf8tqsltcDutpjbTE5rO0fvvaPby9',
+    access_token: '970541014116065280-jKaobSgJdkVw8K68gQ7am66Gwf22jPN',
+    access_token_secret: '8N1xV4eTqVcXGz2mvpnXyeF8AE3S59ww2epV3QzTF1Sv3'
+  });
+
+  var stream = S.stream('user');
+
+  stream.on('follow', function(eventMsg) {
+    if (eventMsg.source.id_str == req.body.id) {
+      stream.stop();
+      res.send('followed!');
+    }
   });
 });
 module.exports = router;

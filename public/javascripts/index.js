@@ -5,6 +5,7 @@ import '../stylesheets/style.css';
 
 // var domain = 'https://www.mobileads.com';
 var domain = 'http://192.168.99.100';
+var twitDomain = '';
 
 var survey = {
   answers: [],
@@ -12,6 +13,10 @@ var survey = {
   player: null,
   params: {},
   userInfo: {},
+  twitUserToken: '',
+  twitUserSecret: '',
+  loginMethod: 'email',
+  executeWin: 0, // youtube state change api keep firing (BUG), track to run only one time
   couponsLeft: {
     A: 0,
     B: 0
@@ -66,7 +71,6 @@ var survey = {
         }
         else {
           _this.answers[_this.currentQuestion - 1] = this.getAttribute('value');
-          console.log(_this.answers);
         }
       }
     }
@@ -176,7 +180,10 @@ var survey = {
         events: {
           'onStateChange': function(event){
             if (event.data == YT.PlayerState.ENDED) {
-              _this.showResult(_this.answers, _this.params, _this.couponsLeft);
+              if (_this.executeWin == 0) {
+                _this.showResult(_this.answers, _this.params, _this.couponsLeft);
+                _this.executeWin++;
+              }
             }
           }
         }
@@ -196,7 +203,17 @@ var survey = {
     });
 
     if (this.params.id) {
-      this.getUserInfo(this.params.id);
+      if (/\D/.test(this.params.id)) { // id is email
+        this.getUserInfo(this.params.id);
+      }
+      else { // id is twitter id
+        setTimeout(function() {
+          transitions.switch({
+            outEle: document.getElementById('loadingPage'),
+            inEle: document.getElementById('regPage')
+          });
+        }, 1000);
+      }
     }
     else {
       if (this.params.q) {
@@ -218,7 +235,7 @@ var survey = {
       }
     }
   },
-  continue: function(data, currentPage) {
+  continue: function(data, currentPage, isFollowing) {
     var _this = this;
 
     if (data.user.state == 'win') {
@@ -240,22 +257,51 @@ var survey = {
         answered: data.user.noQuestionAnswered,
         answers: []
       }
+
       var answersObject = JSON.parse(data.user.Answers);
       for ( var i in answersObject) {
         var no = parseInt(i) - 1;
         this.userInfo.answers[no] = answersObject[i];
       }
-      if (this.userInfo.answered == 0) {
-        qNO = 1;
+      
+      var getCheckPointPage = function(answeredNo) {
+        if (answeredNo == 0) {
+          return document.getElementById('page1');
+        }
+        else {
+          var qNO = answeredNo + 2;
+          return document.getElementById('page' + qNO.toString());
+        }
+      };
+       
+      var toPage = document.getElementById('page1');
+       
+      if (isFollowing == true) {
+        var toPage = getCheckPointPage(this.userInfo.answered);
       }
       else {
-        var qNO = this.userInfo.answered + 2;
+        toPage = document.getElementById('followPage');
+        axios.post(twitDomain + '/listenFollow', {
+          id: data.user.id
+        }).then(function(response) {
+          console.log(response);
+          if (response.data == 'followed!') {
+            var conPage = getCheckPointPage(_this.userInfo.answered);
+            transitions.switch({
+              outEle: toPage,
+              inEle: conPage
+            });
+          }
+        }).catch(function(error) {
+          console.log(error);
+        });
       }
+      
       this.currentQuestion = this.userInfo.answered + 1;
       this.answers = this.userInfo.answers;
       transitions.switch({
         outEle: currentPage,
-        inEle: document.getElementById('page' + qNO.toString()),
+        inEle: toPage,
         inCallback: this.applyAnswers(_this.answers)
       });
     }
@@ -278,45 +324,8 @@ var survey = {
         }, 1000);
       }
       else {
-        _this.continue(response.data, document.getElementById('loadingPage'));
-        // if (response.data.user.state == 'win') {
-        //   _this.showWin(response.data.user.couponLink);
-        //   transitions.switch({
-        //     outEle: document.getElementById('loadingPage'),
-        //     inEle: document.getElementById('page11'),
-        //   });
-        // }
-        // else if (response.data.user.state == 'lose') {
-        //   transitions.switch({
-        //     outEle: document.getElementById('loadingPage'),
-        //     inEle: document.getElementById('page11'),
-        //   });
-        // }
-        // else {
-        //   _this.userInfo = {
-        //     id: response.data.user.id,
-        //     answered: response.data.user.noQuestionAnswered,
-        //     answers: []
-        //   }
-        //   var answersObject = JSON.parse(response.data.user.Answers);
-        //   for ( var i in answersObject) {
-        //     var no = parseInt(i) - 1;
-        //     _this.userInfo.answers[no] = answersObject[i];
-        //   }
-        //   if (_this.userInfo.answered == 0) {
-        //     qNO = 1;
-        //   }
-        //   else {
-        //     var qNO = _this.userInfo.answered + 2;
-        //   }
-        //   _this.currentQuestion = _this.userInfo.answered + 1;
-        //   _this.answers = _this.userInfo.answers;
-        //     transitions.switch({
-        //       outEle: document.getElementById('loadingPage'),
-        //       inEle: document.getElementById('page' + qNO.toString()),
-        //       inCallback: _this.applyAnswers(_this.answers)
-        //     });
-        // }
+        _this.loginMethod = 'email';
+        _this.continue(response.data, document.getElementById('loadingPage'), true);
       }
     }).catch(function(error) {
       console.log(error);
@@ -427,16 +436,31 @@ var survey = {
         axios.post(domain + '/api/coupon/softbank/mark_user', markForm, { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }).then(function(response) {
           console.log(response);
           _this.showWin(response.data.couponLink);
-          var formData = new FormData();
-          formData.append('sender', 'contact@o2otracking.com');
-          formData.append('subject', 'SoftBank Survey Coupon Link');
-          formData.append('recipient', _this.userInfo.id);
-          formData.append('content','<head><meta charset="utf-8"></head><div style="text-align:center;font-weight:600;color:#FF4244;font-size:28px;">おめでとうございます</div><br><br><div style="text-align:center;font-weight:600;">綾鷹クーポンが当たりました！</div><a href="' + response.data.couponLink + '" target="_blank" style="text-decoration:none;"><button style="display:block;margin:20px auto;margin-bottom:40px;border-radius:5px;background-color:#E54C3C;border:none;color:white;width:200px;height:50px;font-weight:600;">クーポンを受取る</button></a>');
-          axios.post(domain + '/mail/send', formData, { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }).then(function(response) {
-            console.log(response);
-          }).catch(function(error) {
-            console.log(error)
-          });
+
+          if (_this.loginMethod == 'email') {
+            var formData = new FormData();
+            formData.append('sender', 'contact@o2otracking.com');
+            formData.append('subject', 'SoftBank Survey Coupon Link');
+            formData.append('recipient', _this.userInfo.id);
+            formData.append('content','<head><meta charset="utf-8"></head><div style="text-align:center;font-weight:600;color:#FF4244;font-size:28px;">おめでとうございます</div><br><br><div style="text-align:center;font-weight:600;">綾鷹クーポンが当たりました！</div><a href="' + response.data.couponLink + '" target="_blank" style="text-decoration:none;"><button style="display:block;margin:20px auto;margin-bottom:40px;border-radius:5px;background-color:#E54C3C;border:none;color:white;width:200px;height:50px;font-weight:600;">クーポンを受取る</button></a>');
+            axios.post(domain + '/mail/send', formData, { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }).then(function(resp) {
+              console.log(resp);
+            }).catch(function(error) {
+              console.log(error)
+            });
+          }
+          else if (_this.loginMethod == 'twitter') {
+            axios.post(twitDomain + '/sendMessage', {
+              token: _this.twitUserToken,
+              tokenSecret: _this.twitUserSecret,
+              recipientId: _this.userInfo.id,
+              text: '綾鷹クーポンが当たりました！ ' + response.data.couponLink
+            }).then(function(resp) {
+              console.log(resp);
+            }).catch(function(error) {
+              console.log(error);
+            });
+          }
         }).catch(function(error) {
           console.log(error);
         });
@@ -495,15 +519,16 @@ var registration = {
           formData.append('subject', 'SoftBank Survey Demo Link');
           formData.append('recipient', userId);
           formData.append('content', '<head><meta charset="utf-8"></head>ご登録ありがとうございました。下記にあるリンクをクリックしてください。その後キャンペーンへの参加をお願いします<br><br><a href="https://s3.amazonaws.com/rmarepo/o2odemo/index.html?id=' + userId + '" target="_blank">https://s3.amazonaws.com/rmarepo/o2odemo/index.html?id=' + userId + '</a>');
-          axios.post(domain + '/mail/send', formData, { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }).then(function(response) {
-            console.log(response);
+          axios.post(domain + '/mail/send', formData, { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }).then(function(resp) {
+            console.log(resp);
           }).catch(function(error) {
             console.log(error);
           });
         }
-        else {
+        else if (response.data.message == 'user exist.') {
+          survey.loginMethod = 'email';
           window.modal.closeAll();
-          survey.continue(response.data, document.getElementById('regPage'));
+          survey.continue(response.data, document.getElementById('regPage'), true);
           // window.location.href = window.location.protocol + '//' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?id=' + userId;
         }
       }).catch(function(error) {
@@ -521,11 +546,15 @@ var registration = {
         // You can use these server side with your app's credentials to access the Twitter API.
         var token = result.credential.accessToken;
         var secret = result.credential.secret;
+        survey.twitUserToken = token;
+        survey.twitUserSecret = secret;
         // The signed-in user info.
         var user = result.user;
-        console.log(result);
         var twitterId = result.additionalUserInfo.profile.id_str;
         console.log(twitterId);
+        var isFollowing = false;
+        var isNew = false;
+        var userData = {};
 
         var twitForm = new FormData();
         twitForm.append('id', twitterId);
@@ -533,30 +562,39 @@ var registration = {
           console.log(response);
           if (response.data.status == true) {
             console.log('new user');
-            survey.continue({
-              user: {
-                Answers: "{}",
-                couponLink: "",
-                id: twitterId,
-                noQuestionAnswered: 0,
-                state: '-'
-              }
-            }, document.getElementById('regPage'));
+            isNew = true;
+            userData.user = {
+              Answers: "{}",
+              couponLink: "",
+              id: twitterId,
+              noQuestionAnswered: 0,
+              state: '-'
+            }
           }
           else {
             console.log('existing user, continue');
-            survey.continue(response.data, document.getElementById('regPage'));
+            isNew = false;
+            userData = response.data;
           }
 
-          axios.post('/getUser', {
-            token: token,
-            tokenSecret: secret,
-            recipientId: twitterId
-          }).then(function(response) {
-            console.log(response);
-          }).catch(function(error) {
-            console.log(error);
-          });
+          survey.loginMethod = 'twitter';  
+          
+          axios.post(twitDomain + '/getUser', {
+              token: token,
+              tokenSecret: secret,
+              id: twitterId
+            }).then(function(resp) {
+              console.log(resp);
+              if (resp.data == 'following') {
+                survey.continue(userData, document.getElementById('regPage'), true);
+              }
+              else {
+                survey.continue(userData, document.getElementById('regPage'), false);
+              }
+            }).catch(function(error) {
+              console.log(error);
+            });
+          
         }).catch(function(err) {
           console.log(err);
         });
