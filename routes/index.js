@@ -2,6 +2,13 @@ var express = require('express');
 var router = express.Router();
 var Twit = require('twit');
 
+var config = {
+  consumer_key: '4tWZrkLv7MFzfAIrKNoNDgZkS',
+  consumer_secret: 'xPFAjpN5BkQANgDYQQoohVuX6f90dyhrtDdIqAODOntJgDsV8A',
+  access_token: '2166166477-gF1gDWvGpxDhokYO1F1SyiU3mAJgAVjltzW2CKQ',
+  access_token_secret: 'HHTAPvLqbJMPSrIq29XLSX9gON65s2zF8c8v5soMqxydV'
+}
+
 /* GET home page. */
 router.get('/', function(req, res, next) {
     res.render('pages/index', {title: 'Hello World'});
@@ -12,18 +19,7 @@ router.get('/register', function(req, res) {
 });
 
 router.post('/sendMessage', function(req, res) {
-  console.log('run send Message');
-  var consumerKey = 'YFJ3RWmtqhxP8Qxyxf1LJ5pRv';
-  var consumerSecret = 'UfxhG4bZ4UrbFpTn60jOFnf8tqsltcDutpjbTE5rO0fvvaPby9';
-  var token = req.body.token;
-  var tokenSecret = req.body.tokenSecret;
-  var T = new Twit({
-  	consumer_key: consumerKey,
-  	consumer_secret: consumerSecret,
-  	access_token: token,
-  	access_token_secret: tokenSecret
-  });
-
+  var T = new Twit(config);
   T.post('direct_messages/events/new', {
     "event": {
       "type": "message_create",
@@ -31,6 +27,7 @@ router.post('/sendMessage', function(req, res) {
         "target": {
           "recipient_id": req.body.recipientId
         },
+        "sender_id": "2166166477", 
         "message_data": {
           "text": req.body.text
         }
@@ -42,33 +39,21 @@ router.post('/sendMessage', function(req, res) {
   		res.send(err);
   	}
   	else {
-  		console.log(data);
   		res.send(data);
   	}
   });
 });
 
 router.post('/getUser', function(req, res) {
-  var consumerKey = 'YFJ3RWmtqhxP8Qxyxf1LJ5pRv';
-  var consumerSecret = 'UfxhG4bZ4UrbFpTn60jOFnf8tqsltcDutpjbTE5rO0fvvaPby9';
-  var token = req.body.token;
-  var tokenSecret = req.body.tokenSecret;
-  var T = new Twit({
-  	consumer_key: consumerKey,
-  	consumer_secret: consumerSecret,
-  	access_token: token,
-  	access_token_secret: tokenSecret
-  });
-
+  var T = new Twit(config);
   T.get('followers/list', {
-  	user_id: '970541014116065280'
+  	user_id: '2166166477'
   }, function(err, data, response) {
   	if (err) {
   		console.log(err);
   		res.send(err);
   	}
   	else {
-  		console.log(data.users);
   		var isFollowing = false;
   		for (var u = 0; u < data.users.length; u++) {
   			console.log(data.users[u].id_str);
@@ -90,15 +75,8 @@ router.post('/getUser', function(req, res) {
 });
 
 router.post('/listenFollow', function(req, res) {
-  var S = new Twit({
-    consumer_key: 'YFJ3RWmtqhxP8Qxyxf1LJ5pRv',
-    consumer_secret: 'UfxhG4bZ4UrbFpTn60jOFnf8tqsltcDutpjbTE5rO0fvvaPby9',
-    access_token: '970541014116065280-jKaobSgJdkVw8K68gQ7am66Gwf22jPN',
-    access_token_secret: '8N1xV4eTqVcXGz2mvpnXyeF8AE3S59ww2epV3QzTF1Sv3'
-  });
-
+  var S = new Twit(config);
   var stream = S.stream('user');
-
   stream.on('follow', function(eventMsg) {
     if (eventMsg.source.id_str == req.body.id) {
       stream.stop();

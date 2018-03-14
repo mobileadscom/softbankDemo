@@ -4,8 +4,9 @@ import transitions from './transitions';
 import '../stylesheets/style.css';
 
 // var domain = 'https://www.mobileads.com';
+// var functionsDomain = 'https://us-central1-softbankdemo-4a194.cloudfunctions.net/widgets';
 var domain = 'http://192.168.99.100';
-var twitDomain = '';
+var functionsDomain = '';
 
 var survey = {
   answers: [],
@@ -281,7 +282,7 @@ var survey = {
       }
       else {
         toPage = document.getElementById('followPage');
-        axios.post(twitDomain + '/listenFollow', {
+        axios.post(functionsDomain + '/listenFollow', {
           id: data.user.id
         }).then(function(response) {
           console.log(response);
@@ -380,6 +381,7 @@ var survey = {
     document.getElementById('couponLink').setAttribute('href', couponLink);
   },
   showResult: function(answers, params, couponsLeft) {
+    var _this = this;
     var win = false;
     var group = 'A';
     var no7_answers = ['伊右衛門', 'おーいお茶', '生茶'];
@@ -424,8 +426,8 @@ var survey = {
 
     var result = document.getElementById('result');
     var resultMsg = document.getElementById('resultMsg');
+
     if (win) {
-      var _this = this;
       // Mark User as winner and Get Coupon Link from BE
       /* req */
       if (_this.userInfo.id) {
@@ -450,7 +452,7 @@ var survey = {
             });
           }
           else if (_this.loginMethod == 'twitter') {
-            axios.post(twitDomain + '/sendMessage', {
+            axios.post(functionsDomain + '/sendMessage', {
               token: _this.twitUserToken,
               tokenSecret: _this.twitUserSecret,
               recipientId: _this.userInfo.id,
@@ -579,7 +581,7 @@ var registration = {
 
           survey.loginMethod = 'twitter';  
           
-          axios.post(twitDomain + '/getUser', {
+          axios.post(functionsDomain + '/getUser', {
               token: token,
               tokenSecret: secret,
               id: twitterId

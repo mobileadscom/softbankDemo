@@ -6,8 +6,10 @@
   <title>Softbank Survey Demo</title>
   <script type="text/javascript" src="javascripts/bundle.js"> </script>
   <script type="text/javascript" src="javascripts/miniSelect.js"> </script>
+  <script type="text/javascript" src="javascripts/modal.js"> </script>
   <link href="stylesheets/main.css" rel="stylesheet">
   <link href="stylesheets/miniSelect.css" rel="stylesheet">
+  <link href="stylesheets/modal.css" rel="stylesheet">
   <link href="stylesheets/checkbox.css" rel="stylesheet">
 </head>
 <body>
@@ -22,6 +24,52 @@
       O2O DEMO
       <br>LOADING
     </div>
+  </div>
+  <div id="regPage" class="page">
+    <div class="msg-wrapper">
+      キャンペーン告知
+      <br><br><br>
+      登録
+    </div>
+    <button class="registerBtn modalOpener" id="regEmail" data-target="regModal">Email</button>
+    <div></div>
+    <button class="registerBtn" id="regTwitter">Twitter</button>
+
+  </div>
+  <div id="regModal" class="modal">
+    <!-- Modal content -->
+    <div class="modal-content">
+      <div class="modal-header">
+        <span class="modalCloser" data-target="regModal">&times;</span>
+        <h2>登録</h2>
+      </div>
+      <div class="modal-body">
+        <div id="regSec">
+          <form id="regFor">
+            <div>Email:</div>
+            <input type="email" id="emailInput" required />
+            <div></div>
+            <input type="submit" id="submitBtn" value="OK" />
+          </form>
+          <div class="loader" id="formWorking">
+          </div>
+        </div>
+        <div id="doneSec">
+          正式登録のためのリンクを登録頂いたEmailアドレスに送付しました。
+          <br>
+          内容をご確認頂き、リンクをクリックしていただければ登録は終了となります。
+          <br>
+          その後アンケートにお進みください。
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="followPage" class="page">
+    <div class="msg-wrapper">
+      キャンペーンに参加するために当社Twitter をフォローしてください。
+    </div>
+    <br>
+    <a href="https://twitter.com/mobileads?ref_src=twsrc%5Etfw" class="twitter-follow-button" data-size="large" data-show-screen-name="false" data-show-count="false">Follow @mobileads</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
   </div>
   <div id="page1" class="page">
     <div class="msg-wrapper">
@@ -377,10 +425,26 @@
 
 </body>
 </html>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+<script src="https://www.gstatic.com/firebasejs/4.11.0/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyBv5E_2QGQazK5dc5JL3YMg4u0NHAt4cLw",
+    authDomain: "softbankdemo-4a194.firebaseapp.com",
+    databaseURL: "https://softbankdemo-4a194.firebaseio.com",
+    projectId: "softbankdemo-4a194",
+    storageBucket: "softbankdemo-4a194.appspot.com",
+    messagingSenderId: "890724005878"
+  };
+  firebase.initializeApp(config);
+</script>
 
 <script type="text/javascript">
 document.addEventListener('DOMContentLoaded', function() {
   miniSelect.init("miniSelect");
+  modal.init();
   survey.init();
+  registration.init();
 });
 </script>
