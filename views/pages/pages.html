@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8">
+  <title>Softbank Survey Registration</title>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<body>
+  <header>
+  	<div class="banner">
+      <img src="images/header.jpg" />
+  	</div>
+  </header>
+  <div class="page">
+    <div class="msg-wrapper">
+      キャンペーン告知
+      <br><br><br>
+      登録
+    </div>
+    <button class="registerBtn" id="regEmail">Email</button>
+    <div></div>
+    <!-- <a href="https://s3.amazonaws.com/rmarepo/o2odemo/index.html" style="text-decoration: none;"><button class="registerBtn">Twitter</button></a> -->
+    <button class="registerBtn" id="regTwitter">Twitter</button>
+  </div>
+  <!-- The Modal -->
+  <div id="myModal" class="modal">
+
+    <!-- Modal content -->
+    <div class="modal-content">
+      <div class="modal-header">
+        <span class="close">&times;</span>
+        <h2>登録</h2>
+      </div>
+      <div class="modal-body">
+        <div id="regPage">
+          <form id="regFor">
+            <div>Email:</div>
+            <input type="email" id="emailInput" required />
+            <div></div>
+            <input type="submit" id="submitBtn" value="OK" />
+          </form>
+          <div class="loader" id="formWorking">
+          </div>
+        </div>
+        <div id="donePage">
+          正式登録のためのリンクを登録頂いたEmailアドレスに送付しました。
+          <br>
+          内容をご確認頂き、リンクをクリックしていただければ登録は終了となります。
+          <br>
+          その後アンケートにお進みください。
+        </div>
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>
+
+<script type="text/javascript">
+var transitions = {
+  'slideIn': function(ele, callback) {
+    ele.style.transition = 'none';
+    ele.style.zIndex = "100";
+    ele.style.display = 'block';
+    ele.style.transform = 'translate(-100%)';
+    setTimeout(function () {
+        ele.style.transition = '0.3s all';
+        ele.style.transform = 'translate(0)';
+        ele.style.opacity = '1';
+        setTimeout(function () {
+            if (callback) {
+              callback();
+            }
+        }, 300);
+    }, 100);
+  },
+  'fadeOut': function(ele, callback) {
+    ele.style.transition = '0.3s all';
+    setTimeout(function () {
+        ele.style.opacity = '0';
+        setTimeout(function () {
+            ele.style.display = 'none';
+            if (callback) {
+              callback();
+            }
+        }, 300);
+    }, 100);
+  },
+  'switch': function(options) {
+    if (options.outEle && options.inEle) {
+      var _this = this;
+      if (options.outCallback) {
+        _this.fadeOut(options.outEle, options.outCallback);
+      }
+      else {
+        _this.fadeOut(options.outEle);
+      }
+      setTimeout(function() {
+        if (options.inCallback) {
+          _this.slideIn(options.inEle, options.inCallback);
+        }
+        else {
+          _this.slideIn(options.inEle); 
+        }
+      }, 410);
+    }
+  }
+};
+
+var form = document.getElementById('regFor');
+var spinner = document.getElementById('formWorking');
+var donePage = document.getElementById('donePage');
+var regPage = document.getElementById('regPage');
+
+
+form.onsubmit = function(event) {
+  event.preventDefault();
+  var userId = document.getElementById('emailInput').value;
+  form.style.display = 'none';
+  spinner.style.display = 'block';
+  /* req */
+  axios.post('https://www.mobileads.com/api/coupon/softbank/register', {
+    id: userId
+  }).then(function(response) {
+    console.log(response);
+    spinner.style.display = 'none';
+    if (response.data.status == true) {
+       transitions.switch({
+        outEle: regPage,
+        inEle: donePage
+      });
+      var formData = new FormData();
+      formData.append('sender', 'contact@o2otracking.com');
+      formData.append('subject', 'SoftBank Survey Demo Link');
+      formData.append('recipient', userId);
+      formData.append('content', '<head><meta charset="utf-8"></head>ご登録ありがとうございました。下記にあるリンクをクリックしてください。その後キャンペーンへの参加をお願いします<br><br><a href="https://s3.amazonaws.com/rmarepo/o2odemo/index.html?email=' + userId + '" target="_blank">https://s3.amazonaws.com/rmarepo/o2odemo/index.html</a>');
+      axios.post('https://www.mobileads.com/mail/send', formData, { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }).then(function(response) {
+        console.log(response);
+      }).catch(function(error) {
+        console.log(error);
+      });
+    }
+    else {
+      window.location.href = 'https://s3.amazonaws.com/rmarepo/o2odemo/index.html?email=' + userId;
+    }
+  }).catch(function(error) {
+    console.log(error);
+    form.style.display = 'block';
+    spinner.style.display = 'none';
+  });
+}
+
+// Open modal
+var modal = document.getElementById('myModal');
+var btn = document.getElementById("regEmail");
+var span = document.getElementsByClassName("close")[0];
+btn.onclick = function() {
+  modal.style.display = "block";
+  regPage.style.display = "block";
+  regPage.style.opacity = "1";
+  document.getElementById('emailInput').value = "";
+  donePage.style.display = "none";
+}
+
+span.onclick = function() {
+  modal.style.display = "none";
+}
+
+window.onclick = function(event) {
+  if (event.target == modal) {
+      modal.style.display = "none";
+  }
+}
+
+// Register with twitter;
+var regT = document.getElementById('regTwitter');
+/*regT.onclick = function() {
+  axios.post('https://api.twitter.com/oauth/request_token',,{
+    auth: {}
+  })
+}*/
+
+</script>
+
+<style type="text/css">
+  body {
+  margin: 0px;
+}
+
+@media( min-width: 1px) {
+  .banner {
+    height: 65px;
+  }
+
+  .page {
+    font-size: 14px;
+  }
+}
+
+@media( min-width: 768px) {
+  .page {
+    font-size: 16px;
+  }
+}
+
+@media( min-width: 996px) {
+  .banner {
+    height: 90px;
+  }
+}
+
+.banner {
+  width: 100%;
+  background-color: #EBEBEB;
+  text-align: left;
+}
+
+.banner img {
+  height: 100%;
+  display: block;
+  margin: auto;
+}
+
+.page {
+  padding: 15px;
+  font-size: 1em;
+  text-align: center;
+}
+
+.page .msg-wrapper {
+  font-weight: 600;
+}
+
+.registerBtn {
+  margin: 5px auto;
+  border-radius: 5px;
+  background-color: #E54C3C;
+  border: none;
+  color: white;
+  width: 200px;
+  height: 40px;
+  font-weight: 600;
+}
+.registerBtn:hover {
+  cursor: pointer;
+  background-color: #D34639;
+}
+
+#emailInput {
+  width: 100%;
+  display: block;
+  margin: 5px auto;
+  max-width: 250px;
+  border-radius: 4px;
+  border: 1px solid #aaa;
+  padding: 8px 0px;
+  padding-left: 8px;
+  box-sizing: border-box;
+}
+
+#submitBtn {
+  background-color: #FF4342;
+  color: white;
+  border-radius: 4px;
+  border: none;
+  width: 120px;
+  height: 35px;
+  font-weight: 600;
+  margin: 20px auto;
+  display: block;
+}
+
+#submitBtn:hover {
+  cursor: pointer;
+  background-color: #D34639;
+}
+
+/* The Modal (background) */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+  position: relative;
+  background-color: #fefefe;
+  margin: auto;
+  padding: 0;
+  border: 1px solid #888;
+  width: 80%;
+  max-width: 650px;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+  -webkit-animation-name: animatetop;
+  -webkit-animation-duration: 0.4s;
+  animation-name: animatetop;
+  animation-duration: 0.4s;
+  text-align:center;
+}
+
+.modal-content #donePage, .modal-content #regPage {
+  padding: 15px;
+  height: 210px;
+}
+
+.modal-content #donePage {
+  display: none;
+}
+
+/* Add Animation */
+@-webkit-keyframes animatetop {
+    from {top:-300px; opacity:0} 
+    to {top:0; opacity:1}
+}
+
+@keyframes animatetop {
+    from {top:-300px; opacity:0}
+    to {top:0; opacity:1}
+}
+
+/* The Close Button */
+.close {
+  color: #444;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  position: absolute;
+  right: 15px;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.modal-header {
+  padding: 2px 16px;
+  background-color: #F5F3DA;
+  color: #444;
+}
+
+.modal-body {padding: 2px 16px;}
+
+.modal-footer {
+  padding: 2px 16px;
+  background-color: #5cb85c;
+  color: white;
+}
+
+.loader {
+  border: 5px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 5px solid #555555;
+  margin: auto;
+  -webkit-animation: spin 1s linear infinite;
+  animation: spin 1s linear infinite;
+  width: 50px;
+  height: 50px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  box-sizing: border-box;
+  display: none;
+}
+
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+</style>
+

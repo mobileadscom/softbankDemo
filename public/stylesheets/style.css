@@ -180,6 +180,7 @@ button:hover {
   height: 34px;
   padding: 1px 8px;
   transition: all 0.3s;
+  position: relative;
 }
 
 button.next-btn, #startSurvey {
@@ -352,6 +353,58 @@ button:hover .left:after {
   transform: translate(-50%, -50%);
   box-sizing: border-box;
   display: none;
+}
+
+#regPage .msg-wrapper {
+  margin-bottom: 15px;
+}
+
+#regWorking.loader {
+  position: static;
+  transform: none;
+  border: 5px solid #94E2EF;
+  border-top: 5px solid #1DA1F2;
+}
+
+#followBtn:hover {
+  cursor: pointer;
+}
+
+#successFollow {
+  width: 200px;
+  margin: auto;
+  margin-top: 15px;
+  background-color: #444;
+  border-radius: 2px;
+  color: white;
+  padding: 6px;
+  font-weight: 600;
+  font-size: 16px;
+  -webkit-animation: appearIn 0.3s linear;
+  animation: appearIn 0.3s linear;
+  display: none;
+}
+
+@-webkit-keyframes appearIn {
+  0% {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes appearIn {
+  0% {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @-webkit-keyframes spin {

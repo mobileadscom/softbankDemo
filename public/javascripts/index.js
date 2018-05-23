@@ -3,10 +3,10 @@ import jammer from './jammer';
 import transitions from './transitions';
 import '../stylesheets/style.css';
 
-// var domain = 'https://www.mobileads.com';
-// var functionsDomain = 'https://us-central1-softbankdemo-4a194.cloudfunctions.net/widgets';
-var domain = 'http://192.168.99.100';
-var functionsDomain = '';
+var domain = 'https://www.mobileads.com';
+var functionsDomain = 'https://us-central1-softbankdemo-4a194.cloudfunctions.net/widgets';
+// var domain = 'http://192.168.99.100';
+// var functionsDomain = '';
 
 var survey = {
   answers: [],
@@ -282,20 +282,31 @@ var survey = {
       }
       else {
         toPage = document.getElementById('followPage');
-        axios.post(functionsDomain + '/listenFollow', {
-          id: data.user.id
-        }).then(function(response) {
-          console.log(response);
-          if (response.data == 'followed!') {
-            var conPage = getCheckPointPage(_this.userInfo.answered);
-            transitions.switch({
-              outEle: toPage,
-              inEle: conPage
-            });
-          }
-        }).catch(function(error) {
-          console.log(error);
-        });
+        var conPage = getCheckPointPage(_this.userInfo.answered);
+        var followBtn = document.getElementById('followBtn');
+        followBtn.onclick = function() {
+          followBtn.style.display = 'none';
+          axios.post(functionsDomain + '/followUs', {
+            token: _this.twitUserToken,
+            tokenSecret: _this.twitUserSecret
+          }).then(function(response) {
+            console.log(response);
+            if (response.data == 'followed!') {
+              var sMsg = document.getElementById('successFollow');
+              sMsg.style.display = 'block';
+              setTimeout(function() {
+                var conPage = getCheckPointPage(_this.userInfo.answered);
+                transitions.switch({
+                  outEle: toPage,
+                  inEle: conPage
+                });
+              }, 2000);
+            }
+          }).catch(function(error) {
+            console.log(error);
+            followBtn.style.display = 'block';
+          })
+        }
       }
       
       this.currentQuestion = this.userInfo.answered + 1;
@@ -542,6 +553,10 @@ var registration = {
 
     var regT = document.getElementById('regTwitter');
     regT.onclick = function() {
+      var regLoader = document.getElementById('regWorking');
+      var regButtons = document.getElementById('regButtons');
+      regLoader.style.display = 'block';
+      regButtons.style.display = 'none';
       var provider = new firebase.auth.TwitterAuthProvider();
         firebase.auth().signInWithPopup(provider).then(function(result) {
         // This gives you a the Twitter OAuth 1.0 Access Token and Secret.
@@ -554,12 +569,15 @@ var registration = {
         var user = result.user;
         var twitterId = result.additionalUserInfo.profile.id_str;
         console.log(twitterId);
+        
         var isFollowing = false;
         var isNew = false;
         var userData = {};
-
+        
         var twitForm = new FormData();
         twitForm.append('id', twitterId);
+
+
         axios.post(domain + '/api/coupon/softbank/register', twitForm, { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }).then(function(response) {
           console.log(response);
           if (response.data.status == true) {
@@ -595,10 +613,14 @@ var registration = {
               }
             }).catch(function(error) {
               console.log(error);
+              regLoader.style.display = 'none';
+              regButtons.style.display = 'block';
             });
           
         }).catch(function(err) {
           console.log(err);
+          regLoader.style.display = 'none';
+          regButtons.style.display = 'block';
         });
       }).catch(function(error) {
         // Handle Errors here.
@@ -608,6 +630,8 @@ var registration = {
         var email = error.email;
         // The firebase.auth.AuthCredential type that was used.
         var credential = error.credential;
+        regLoader.style.display = 'none';
+        regButtons.style.display = 'block';
         // ..
       });
     }

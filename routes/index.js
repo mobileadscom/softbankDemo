@@ -44,6 +44,28 @@ router.post('/sendMessage', function(req, res) {
   });
 });
 
+router.post('/followUs', function(req, res) {
+  var T = new Twit({
+    consumer_key: '4tWZrkLv7MFzfAIrKNoNDgZkS',
+    consumer_secret: 'xPFAjpN5BkQANgDYQQoohVuX6f90dyhrtDdIqAODOntJgDsV8A',
+    access_token: req.body.token,
+    access_token_secret: req.body.tokenSecret
+  });
+  T.post('friendships/create', {
+    user_id: '2166166477'
+  }, function(err, data, response) {
+    if (err) {
+      console.log(err);
+      res.send(err);
+    }
+    else {
+      if (response.statusCode == 200) {
+        res.send('followed!');
+      }
+    }
+  });
+});
+
 router.post('/getUser', function(req, res) {
   var T = new Twit(config);
   T.get('followers/list', {
@@ -56,18 +78,15 @@ router.post('/getUser', function(req, res) {
   	else {
   		var isFollowing = false;
   		for (var u = 0; u < data.users.length; u++) {
-  			console.log(data.users[u].id_str);
   			if (data.users[u].id_str == req.body.id) {
   				isFollowing = true;
   			}
   		}
 
   		if (isFollowing) {
-  			console.log('following');
   			res.send('following');
   		}
   		else {
-  			console.log('not following');
         res.send('not following');
   		}
   	}
