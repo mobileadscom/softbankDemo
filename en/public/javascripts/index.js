@@ -76,11 +76,14 @@ var app = {
 					if (response.data.couponLink) {
 						this.initResult('win', response.data.couponLink);
 						var message = '綾鷹クーポンが当たりました！ ' + response.data.couponLink;
-						user.messageTwitter(message);
+						
 
 						if (user.info.id.indexOf('@') > -1) { // login via email
 		        	var emailContent = '<head><meta charset="utf-8"></head><div style="text-align:center;font-weight:600;color:#FF4244;font-size:28px;">Congratulations. You are qualified for our offer.</div><br><br><div style="text-align:center;font-weight:600;">Please click the button below to get your coupon.</div><a href="' + response.data.couponLink + '" target="_blank" style="text-decoration:none;"><button style="display:block;margin:20px auto;margin-bottom:40px;border-radius:5px;background-color:#E54C3C;border:none;color:white;width:200px;height:50px;font-weight:600;">Coupon</button></a>';
 	        	  user.sendEmail(user.info.id, 'MobileAds Coupon Link', emailContent);
+						}
+						else {
+							user.messageTwitter(message);
 						}
 						// user.passResult(user.info.id, flag, user.source, response.data.couponLink);
 					}

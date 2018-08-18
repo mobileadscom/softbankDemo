@@ -4,7 +4,7 @@ var winningLogic = {
 	winLogic: {
     '5': {
       value: ['Convenience Store', 'Supermarket'],
-      priority: [1, 1] // smaller number means higher priority.
+      priority: [2, 3] // smaller number means higher priority.
     }
 		/*'5': {
 			value: ['ほぼ毎日', '週４〜５回', '週２〜３回'],

@@ -7,7 +7,7 @@ firebase.initializeApp(firebaseConfig);
 
 var domain = 'https://www.mobileads.com';
 // var domain = 'http://localhost:8080';
-var functionsDomain = 'https://us-central1-familymarto2odemo.cloudfunctions.net/twitter';
+var functionsDomain = 'https://us-central1-softbankdemo-4a194.cloudfunctions.net/widgets';
 
 // firestore
 var db = firebase.firestore();
